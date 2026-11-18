@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback, useEffect, useRef } from 'react'
 import './App.css'
 
 function App() {
@@ -6,7 +6,12 @@ function App() {
   const [numberAllowed, setNumberAllowed] = useState(false)
   const [charAllowed, setCharAllowed] = useState(false)
   const [password, setPassword] = useState("")
+  const passwirdRef = useRef(null)
 
+  /* useCallback stores the function in the cache instead of createing a new 
+  a new function evertime a change is made 
+  useCallback: Does NOT run the code! Just saves the function for later
+  */
   const passwordGenerator = useCallback(() => {
     let pass = ""
     let str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
@@ -20,6 +25,13 @@ function App() {
                             
     setPassword(pass)
   }, [length, numberAllowed, charAllowed])
+
+  const copypassword = useCallback(()=>{
+    
+    passwirdRef.current?.select();
+    window.navigator.clipboard.writeText(password)
+  },[password])
+  // useEffect: Runs the code inside immediately after rendering
 
   useEffect(() => {
     passwordGenerator()
@@ -37,7 +49,7 @@ function App() {
             placeholder='Password'
             readOnly
           />
-          <button className='outline-none bg-blue-700 text-white px-3 py-1 shrink-0 cursor-pointer'>
+          <button className='outline-none bg-blue-700 text-white px-3 py-1 shrink-0 cursor-pointer hover:bg-blue-300' onClick={copypassword}>
             copy
           </button>
         </div>
