@@ -1,21 +1,15 @@
-import { useEffect , useState} from 'react'
+import { useEffect, useState } from "react";
 
-// https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.json
+function useCurrencyInfo(currency) {
+    const [data, setData] = useState({});
 
-const [curr , Storecurr] = useState({})
+    useEffect(() => {
+        fetch(`https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/${currency}.json`)
+            .then((res) => res.json())
+            .then((res) => setData(res[currency]));
+    }, [currency]);
 
-function useCurrencyconverter(currency){
-    fetch(`https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/${currency}.json`)
-    .then((res)=>{
-        return res.json
-    })
-    .then((res)=>{
-        Storecurr(res[curr])
-        
-    })
-    console.log(curr)
-    return curr
+    return data;
 }
 
-
-export default useCurrencyconverter
+export default useCurrencyInfo;
